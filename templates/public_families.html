@@ -1,4 +1,8 @@
-
+<!-- public_families.html
+     User is not logged in.
+     Login prompt is displayed.
+     No create, update, or delete capability is available to the user.
+-->
 {% extends "main.html" %}
 {% block content %}
     <div class="row top-menu">
@@ -7,9 +11,11 @@
                 <a href="{{url_for('showLogin')}}">Click to Log in </a>
             </div>
     </div>
+
     <div class="row divider blue">
             <div class="col-md-12"></div>
     </div>
+
     <div class="row banner main">
             <div class="col-md-1"></div>
             <div class="col-md-11 padding-none">
@@ -36,7 +42,7 @@
     </div>
 
     {% for family in families %}
-        <a href = "{{url_for('showFamilies')}}">
+        <a href = "{{url_for('showPets', family_id=family.id)}}">
             <div class="row">
                 <div class="col-md-1"></div>
                     <div class="col-md-10 family-list">

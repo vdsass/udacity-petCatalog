@@ -1,6 +1,12 @@
+<!-- families.html
+        User has been logged in. All CRUD capability is available to the user.
+
+        Login prompt is not displayed.
+
+-->
 {% extends "main.html" %}
 {% block content %}
-	{% include "header.html" %}
+{% include "header.html" %}
 
 	<div class="row top-menu">
 		<div class="col-md-10"></div>
@@ -14,7 +20,7 @@
 	<div class="row banner main">
 		<div class="col-md-1"></div>
 		<div class="col-md-11 padding-none">
-			<h1>Restaurants</h1>
+			<h1>Pet Families</h1>
 		</div>
 	</div>
 
@@ -30,24 +36,25 @@
 		{% endwith %}
 	</div>
 	
+
 	<div class="row padding-top padding-bottom">
 		<div class="col-md-1"></div>
 		<div class="col-md-10 padding-none">
-			<a href="{{url_for('newRestaurant')}}">
-				<button class="btn btn-default" id="new-restaurant">
-					<span class="glyphicon glyphicon-cutlery" aria-hidden="true"></span>Add Restaurant
+			<a href="{{url_for('newFamily')}}">
+				<button class="btn btn-default" id="new-family">
+					<span class="glyphicon glyphicon-heart" aria-hidden="true"></span>Add A Pet Family
 				</button>
 			</a>
 		</div>
 		<div class="col-md-1"></div>
 	</div>
 
-	{% for restaurant in restaurants %}
-		<a href = "{{url_for('showMenu', restaurant_id = restaurant.id)}}">
+	{% for family in families %}
+		<a href = "{{url_for('showPets', family_id=family.id)}}">
 			<div class="row">
 				<div class="col-md-1"></div>
-					<div class="col-md-10 restaurant-list">
-						<h3>{{restaurant.name}}</h3>
+					<div class="col-md-10 family-list">
+						<h3>{{family.name}}</h3>
 					</div>
 				<div class="col-md-1"></div>
 			</div>
