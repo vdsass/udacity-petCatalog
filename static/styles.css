@@ -3,6 +3,52 @@
 	font-weight: 700;
 }
 
+/*#form {
+    background-color: #FFF;
+    height: 600px;
+    width: 600px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 0px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding: 0px;
+    text-align:center;
+}
+label {
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-size: 18px;
+    color: #333;
+    height: 20px;
+    width: 200px;
+    margin-top: 10px;
+    margin-left: 10px;
+    text-align: right;
+    margin-right:15px;
+    float:left;
+}
+input {
+    height: 20px;
+    width: 300px;
+    border: 1px solid #000;
+    margin-top: 10px;
+}*/
+
+figure {
+    display: inline-block;
+    border: hidden;
+    margin: 5px; /* adjust as needed */
+}
+
+figure img {
+    vertical-align: middle;
+}
+
+figure figcaption {
+    border: hidden;
+    text-align: center;
+}
+
 h1 {
 	font-family: "Helvetica Neue Light", Roboto, Helvetica, Arial, sans-serif;
 	font-size: 50px;
@@ -22,25 +68,52 @@ h3 {
 	color: #4A4A4A;
 	line-height: 23px;
 }
- p {
+
+p {
  	font-family: "Helvetica Neue", Roboto, Helvetica, Arial, sans-serif;
  	font-size: 16px;
  	color: #7B7573;
  	line-height: 24px;
  	font-weight: 400;
- }
+}
 
- strong {
+strong {
  	font-size: 16px;
  	color: #7B7573;
  	line-height: 24px;
- }
+}
 
- a {
- 	font-size: 14px;
+a {
+    font-size: 14px;
  	color: #0093B9;
  	line-height: 17px;
- }
+}
+
+
+/*
+label {
+
+    text-align: right;
+    clear: both;
+    float:left;
+    margin-right:15px;
+}
+
+input {
+    height: 20px;
+    width: 300px;
+    border: 1px solid #000;
+    margin-top: 10px;
+    float: left;
+}
+
+input[type=button] {
+    float:none;
+}
+
+*/
+
+
 .padding-top {
 	padding-top: 30px;
 }
@@ -98,9 +171,13 @@ h3 {
 .divider.green {
 	background-color: #9FB80A;
 }
+.row.banner.main {
+    text-align: center;
+    font-weight: bolder;
+}
 .banner.main {
 	height: 400px;
-	background: url("/static/top-banner.png");
+	background: url("/static/pets-banner.png");
 	background-position: right;
 	background-repeat: no-repeat;
 	background-size: cover;
@@ -160,3 +237,6 @@ u }
 	text-align: center;
 
 }
+
+
+

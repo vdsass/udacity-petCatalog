@@ -1,3 +1,6 @@
+<!--
+    header.html
+-->
 <div class="row top-menu">
 	<div class="col-md-6">
 		<a href="{{url_for('showFamilies')}}">
@@ -8,7 +11,7 @@
 		{%if 'username' not in session %}
             <a href="{{url_for('showLogin')}}">Click here to log in</a>
 		{% else %}
-            <!-- 'disconnect' is generic function for all logon services -->
+            <!-- 'disconnect' is generic function for all logoff services -->
             <a href="{{url_for('disconnect')}}">Log off</a>
 		{% endif %}
 	</div>

@@ -1,14 +1,18 @@
-<!-- public_families.html
-     User is not logged in.
-     Login prompt is displayed.
-     No create, update, or delete capability is available to the user.
+<!--
+    public_families.html
+
+        User is **not** logged in.
+
+        Login prompt is displayed.
+
+        No create, update, or delete capability is available to the user.
 -->
 {% extends "main.html" %}
 {% block content %}
     <div class="row top-menu">
             <div class="col-md-10"></div>
             <div class="col-md-2 text-right">
-                <a href="{{url_for('showLogin')}}">Click to Log in </a>
+                <a href="{{url_for('showLogin')}}">Click To Log In </a>
             </div>
     </div>
 

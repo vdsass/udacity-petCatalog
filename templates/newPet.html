@@ -1,3 +1,9 @@
+<!-- newPet.html
+        User has been logged in. All CRUD capability is available to the user.
+        Login prompt is not displayed.
+
+        Argument: family
+-->
 {% extends "main.html" %}
 {% block content %}
 {% include "header.html" %}
@@ -6,7 +12,7 @@
 	</div>
 	<div class="row banner menu">
 		<div class="col-md-11 col-md-offset-1 padding-none">
-			<h1>New Menu Item</h1>
+			<h1>Add a Pet to the Family of {{family.name}}</h1>
 		</div>
 	</div>
 	<div class="row">
@@ -14,39 +20,29 @@
 			<form action="#" method = "post">
 				<div class="form-group">
 					<label for="name">Name:</label>
-					<input type ="text" maxlength="50" class="form-control" name="name"placeholder="Name of the course">
-
-					<label for="description">Description:</label>
-					<textarea class="form-control" maxlength="250" rows="3" name="description" placeholder="Description of the course"></textarea>
-
-					<label for="price">Price:</label>
-					<div class="input-group">
-						<div class="input-group-addon">$</div>
-						<input type ="text" class="form-control" maxlength="10" name="price" placeholder="Price in $">
-					</div>
-					<label for="course">Course:</label>
+					<input type ="text" maxlength="50" class="form-control" name="name" placeholder="Pet's Name">
+                    <label for="age">Age:</label>
+					<input type ="text" maxlength="10" class="form-control" name="age" placeholder="Pet's Age in years">
+					<label for="gender">Gender:</label>
 					<div class="radio">
 					  <label>
-					    <input type="radio" name="course" id="course1" value="Appetizer">Appetizer
+					    <input type="radio" name="gender" id="gender1" value="Male">Male
 					  </label>
 					</div>
 					<div class="radio">
 					  <label>
-					    <input type="radio" name="course" id="course2" value="Entree">Entree
+					    <input type="radio" name="gender" id="gender2" value="Female">Female
 					  </label>
 					</div>
 					<div class="radio">
 					  <label>
-					    <input type="radio" name="course" id="course3" value="Dessert">Dessert
+					    <input type="radio" name="gender" id="gender3" value="Neuter">Neuter
 					  </label>
 					</div>
-					<div class="radio">
-					  <label>
-					    <input type="radio" name="course" id="course4" value="Beverage">Beverage
-					  </label>
-					</div>
+                    <label for="description">Description:</label>
+					<textarea class="form-control" maxlength="250" rows="3" name="description" placeholder="Description"></textarea>
 					<button type="submit" class="btn btn-default" id="submit" type="submit">
-					<span class="glyphicon glyphicon-glass" aria-hidden="true"></span>Create</button>
+					<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Add</button>
 				</div>
 			</form>
 		</div>

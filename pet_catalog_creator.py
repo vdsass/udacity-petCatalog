@@ -61,7 +61,7 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(250), nullable=False)
     email = Column(String(250), nullable=True)
-    image_url = Column(String(1024), nullable=True)
+    picture_url = Column(String(2048), nullable=True)
 
 
 class Family(Base):
@@ -73,6 +73,8 @@ class Family(Base):
    
     id = Column(Integer, primary_key=True)
     name = Column(String(250), nullable=False)
+    description = Column(String(250), nullable=True)
+    image_url = Column(String(1024), nullable=True)
 
     user_id = Column(Integer,ForeignKey('user.id'))
     user = relationship(User)
@@ -120,10 +122,10 @@ class Pet(Base):
         return {
                 'id'           : self.id,
                 'name'         : self.name,
-                'description'  : self.description,
                 'breed'        : self.breed,
                 'gender'       : self.gender,
                 'age'          : self.age,
+                'description'  : self.description,
             }
 engine = create_engine("sqlite:///{}".format(DB_NAME))
 Base.metadata.create_all(engine)

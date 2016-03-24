@@ -42,81 +42,67 @@ session = DBSession()
 
 #===============================================================================
 # Users
-user_1 = User(name="Dennis Sass", email="dsass92103@gmail.com")
+user_1 = User(name="D Sass",
+              email="dsass92103@gmail.com",
+              picture_url="/static/users/vds_bwSelfPortrait.png")
 session.add(user_1)
 session.commit()
 #-------------------------------------------------------------------------------
-user_2 = User(name="Tommy John", email="tj@gmail.com")
+user_2 = User(name="R Jones",
+              email="rj4095@gmail.com",
+              picture_url="/static/users/Ronni-HeadShot.jpg")
 session.add(user_2)
 session.commit()
 #===============================================================================
 # Family: Dogs
-family_dogs = Family(name="Dogs", user = user_1)
+family_dogs = Family(name="Dogs", description="", image_url="/static/dogs/generic_image.png", user=user_1)
 session.add(family_dogs)
 session.commit()
 #===============================================================================
-pet_1 = Pet(breed="TBD", gender="TBD", name="Rocky", age="TBD", description="BFF Chocolate Labrador", family=family_dogs, user=user_1, image_url="file:///C:.\static\dogs\dog_rocky.jpg", special_needs= "TBD")
+pet_1 = Pet(breed="Labrador", gender="Neuter", name="Rocky", age="12 1/2 years", description="BFF Chocolate Labrador", family=family_dogs, user=user_1, image_url="/static/dogs/rocky.JPG", special_needs= "Lots of hugs and petting. A cookie now-and-then.")
 
 session.add(pet_1)
 session.commit()
 #===============================================================================
 # Family: Cats
-family_cats = Family(name="Cats", user=user_1)
+family_cats = Family(name="Cats", description="", image_url="/static/cats/generic_image.jpg", user=user_1)
 session.add(family_cats)
 session.commit()
 #===============================================================================
-pet_2 = Pet(breed="TBD", gender="TBD", name="Kitty", age="TBD", description="Our first kitty. Lost her right front leg in an accident.", family=family_cats, user=user_1, image_url="TBD", special_needs="TBD")
+pet_2 = Pet(breed="Unknown", gender="Neuter", name="Kitty", age="10 years +", description="Our first kitty. Lost her right front leg in an accident.", family=family_cats, user=user_1, image_url="TBD", special_needs="TBD")
 session.add(pet_2)
 session.commit()
 #===============================================================================
-# Family: Gerbil
-family_3 = Family(name="Gerbil", user=user_1)
-session.add(family_3)
-session.commit()
-#===============================================================================
-pet_3 = Pet(name="PeeWee", description="Funny-looking animal...", family=family_3, user=user_1, image_url="TBD", special_needs='')
-session.add(pet_3)
-session.commit()
-#===============================================================================
 # Family: Fish
-family_fish = Family(name="Fish", user=user_1)
+family_fish = Family(name="Fish", description="",  image_url="/static/fish/generic_image.jpg", user=user_1)
 session.add(family_fish)
 session.commit()
 #===============================================================================
-pet_4 = Pet(name="Bubbles", description="Goldfish", family=family_fish, user=user_1, image_url="TBD", special_needs='')
+pet_4 = Pet(name="Bubbles", description="Goldfish", family=family_fish, user=user_1, image_url="/static/fish/generic_image.jpg", special_needs='')
 session.add(pet_4)
 session.commit()
-#===============================================================================
-# Family: Pig
-family_5 = Family(name="Pig", user=user_1)
-session.add(family_5)
-session.commit()
-#===============================================================================
-pet_5 = Pet(name="Tubby", description="Pig", family=family_5, user=user_1, image_url="TBD", special_needs='')
-session.add(pet_5)
-session.commit()
 #-------------------------------------------------------------------------------
-pet_N = Pet(name="Sushi", description="Goldfish", family=family_fish, user=user_1, image_url="TBD", special_needs='')
+pet_N = Pet(name="Sushi", description="Goldfish", family=family_fish, user=user_1, image_url="/static/fish/generic_image.jpg", special_needs='')
 session.add(pet_N)
 session.commit()
 #-------------------------------------------------------------------------------
-pet_N = Pet(name="Casper", description="Goldfish", family=family_fish, user=user_1, image_url="TBD", special_needs='')
+pet_N = Pet(name="Casper", description="Goldfish", family=family_fish, user=user_1, image_url="/static/fish/generic_image.jpg", special_needs='')
 session.add(pet_N)
 session.commit()
 #-------------------------------------------------------------------------------
-pet_N = Pet(name="Shadow", description="Goldfish", family=family_fish, user=user_1, image_url="TBD", special_needs='')
+pet_N = Pet(name="Shadow", description="Goldfish", family=family_fish, user=user_1, image_url="/static/fish/generic_image.jpg", special_needs='')
 session.add(pet_N)
 session.commit()
 #-------------------------------------------------------------------------------
-pet_N = Pet(name="Sunny", description="Goldfish", family=family_fish, user=user_1, image_url="TBD", special_needs='')
+pet_N = Pet(name="Sunny", description="Goldfish", family=family_fish, user=user_1, image_url="/static/fish/generic_image.jpg", special_needs='')
 session.add(pet_N)
 session.commit()
 #-------------------------------------------------------------------------------
-pet_N = Pet(name="Comet", description="Goldfish", family=family_fish, user=user_1, image_url="TBD", special_needs='')
+pet_N = Pet(name="Comet", description="Goldfish", family=family_fish, user=user_1, image_url="/static/fish/generic_image.jpg", special_needs='')
 session.add(pet_N)
 session.commit()
 #-------------------------------------------------------------------------------
-pet_N = Pet(name="Butchie", description="Found this guy in a plant nursery hiding under the plants.", family=family_cats, user=user_1, image_url="TBD", special_needs='')
+pet_N = Pet(name="Butchie", description="Found this guy in a plant nursery hiding under the plants.", family=family_cats, user=user_1, image_url="/static/cats/generic_image.jpg", special_needs='')
 session.add(pet_N)
 session.commit()
 

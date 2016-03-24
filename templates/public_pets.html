@@ -13,11 +13,20 @@
 
 	<div class="row banner menu">
 		<div class="col-md-11 col-md-offset-1 padding-none">
-			<h1>{{ family.name }}
-			<figure class="creator">
-				<img src="{{ creator.picture }}">
-				<figcaption>{{ creator.name }}</figcaption>
-			</figure>
+			<h1>Family of Pet {{ family.name }}
+
+<!--				<div class="generic_pet">
+					<figure>
+						<img src="{{ family.image_url }}">
+					</figure>
+				</div>-->
+
+				<div class="creator">
+					<figure>
+						<img src="{{ creator.picture_url }}", alt="Creator photograph">
+						<figcaption>Created by: {{ creator.name }}</figcaption>
+					</figure>
+				</div>
 			</h1>
 		</div>
 	</div>
@@ -46,9 +55,21 @@
 	<!-- display pets -->
 	{% for pet in pets %}
 		<div class="pet">
-			<h2>{{pet.breed}}</h2>
-			<h3>{{pet.name}}</h3>
-			<p>{{pet.description}}</p>
+
+			<h2>{{ pet.name }}</h2>
+			<h3>{{ pet.breed }}</h3>
+			<h3>{{ pet.gender }}</h3>
+			<h3>{{ pet.age }}</h3>
+			<p>{{ pet.description }}</p>
+			<p>{{ pet.special_needs }}</p>
+
+			<div class="pet_image">
+				<figure>
+					<img src="{{ pet.image_url }}"  alt="Photo of {{ pet.name }}">
+					<figcaption>{{ pet.name }}</figcaption>
+				</figure>
+			</div>
+
 		</div>
 	{% endfor %}
 

@@ -51,6 +51,14 @@ def showLogin():
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
                     for x in xrange(32))
     login_session['state'] = state
+
+    # these should probably be temporary placeholders
+    #login_session['username'] = "UNK"
+    #login_session['email'] = "UNK"
+    #login_session['picture_url'] = "UNK"
+    #login_session['user_id'] = "UNK"
+    #login_session['provider'] = "UNK"
+
     return render_template('login.html', STATE=state)
 
 
@@ -78,14 +86,6 @@ def gconnect():
         oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
 
-
-        if _DEBUG:
-            for cred in credentials:
-                print "gconnect(): cred={}".format(cred)
-
-
-
-
     except FlowExchangeError:
         response = make_response(
             json.dumps('Failed to upgrade the authorization code.'), 401)
@@ -108,29 +108,24 @@ def gconnect():
         response.headers['Content-Type'] = 'application/json'
         return response
 
-    # Verify that the access token is used for the intended user.
+    # Verify that the access token is used for the intended user
     gplus_id = credentials.id_token['sub']
     if result['user_id'] != gplus_id:
+        if _DEBUG:
+            print "gconnect(): result['user_id']={}".format(result['user_id'])
+            print "gconnect(): gplus_id={}".format(gplus_id)
         response = make_response(
             json.dumps("Token's user ID doesn't match given user ID."), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
 
-    if _DEBUG:
-        print "gconnect(): result['user_id']={}".format(result['user_id'])
-        print "gconnect(): gplus_id={}".format(gplus_id)
-
-    if result['user_id'] != gplus_id:
-        response = make_response(
-            json.dumps("Token's user ID doesn't match given user ID."), 401)
-        response.headers['Content-Type'] = 'application/json'
-        return response
-
-    # Verify that the access token is valid for this app.
+    # Verify the access token is valid for this application
     if result['issued_to'] != CLIENT_ID:
+        if _DEBUG:
+            print "gconnect(): result['issued_to']={}".format(result['issued_to'])
+            print "gconnect(): CLIENT_ID={}".format(CLIENT_ID)
         response = make_response(
-            json.dumps("Token's client ID does not match app's."), 401)
-        #print "Token's client ID does not match app's."
+            json.dumps("Token's client ID does not match application's client ID "), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -155,32 +150,34 @@ def gconnect():
     # Get user info
     userinfo_url = "https://www.googleapis.com/oauth2/v1/userinfo"
     params = {'access_token': credentials.access_token, 'alt': 'json'}
-    answer = requests.get(userinfo_url, params=params)
+    response = requests.get(userinfo_url, params=params)
 
-    data = answer.json()
-    print "gconnect(): data={}".format(data)
+    data = response.json()
+
+    if _DEBUG:
+        print
+        print "gconnect(): data={}".format(data)
+        print
 
     login_session['username'] = data['name']
-    login_session['picture'] = data['picture']
     login_session['email'] = data['email']
-
+    login_session['picture_url'] = data['picture']
 
     # verify user is registered
     user_id = getUserID(login_session['email'])
+
     if user_id is not None:
         user_info = getUserInfo(user_id)
         login_session['user_id'] = user_id
-
         if _DEBUG:
             print "gconnect(): User is registered! user_id={}".format(user_id)
             print "gconnect(): user_info={}".format(user_info)
-
     else:
         new_user_id = createUser(login_session)
         login_session['user_id'] = new_user_id
 
         if _DEBUG:
-            print "gconnect(): User is not Registered!"
+            print "gconnect(): User was not Registered!"
             print "gconnect(): new_user_id={}".format(new_user_id)
 
 
@@ -189,12 +186,16 @@ def gconnect():
     output += login_session['username']
     output += '!</h1>'
     output += '<img src="'
-    output += login_session['picture']
+    output += login_session['picture_url']
     output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
+
     flash("You are logged in as {}".format(login_session['username']))
 
     if _DEBUG:
-        print "Fini!"
+        print
+        print "login_session['username'] = {}".format(login_session['username'])
+        print "login_session['email'] = {}".format(login_session['email'])
+        print "login_session['picture_url'] = {}".format(login_session['picture_url'])
         print
 
     return output
@@ -209,29 +210,58 @@ def fbconnect():
 
     # Obtain authorization code
     access_token = request.data
-    print "fbconnect(): [authorization] code={}".format(access_token)
 
-    app_id = json.loads(open('fb_client_secrets.json','r').read())['app']['app_id']
-    app_secret = json.loads(open('fb_client_secrets.json','r').read())['app']['app_secret']
+    login_session['access_token'] = access_token
 
-    url = "https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id=%s&client_secret=%s&fb_exchange_token=%s" % (app_id,app_secret,access_token)
+    client_id = json.loads(open('fb_client_secrets.json','r').read())['app']['app_id']
+    client_secret = json.loads(open('fb_client_secrets.json','r').read())['app']['app_secret']
+
+    if _DEBUG:
+        print
+        print "fbconnect(): access_token={}".format(access_token)
+        print "fbconnect(): client_id={}".format(client_id)
+        print "fbconnect(): client_secret={}".format(client_secret)
+        print
+
+    oauth_url = "https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id={}&client_secret={}&fb_exchange_token={}".format(client_id,client_secret,access_token)
+
+    # https://graph.facebook.com/me?access_token=INSERT_ACCESS_TOKEN_HERE&fields=name,id,email
+
+
+    if _DEBUG:
+        print
+        print "fbconnect(): oauth_url={}".format(oauth_url)
+        print
 
     h = httplib2.Http()
-    result = h.request(url,'GET')[1]
+    result = h.request(oauth_url,'GET')[1]
 
-    # use token to get user infor from API
-    userinfo_url = "https://graph.facebook.com/v2.2/me"
+    if _DEBUG:
+        print
+        print "fbconnect(): result={}".format(result)
+        print
+
+    # use token to get user information from API
     # strip expire tag from access token
     token = result.split("&")[0]
 
-    url = 'https://graph.facebook.com/v2.4/me?%s&fields=name,id,email' % token
+    if _DEBUG:
+        print "fbconnect(): token={}".format(token)
+
+    userinfo_url = "https://graph.facebook.com/v2.4/me?{}&fields=name,id,email".format(token)
 
     if _DEBUG:
-        print "url sent for API access:()".format(url)
+        print "fbconnect(): userinfo_url={}".format(userinfo_url)
 
     h = httplib2.Http()
-    result = h.request(url,'GET')[1]
+    result = h.request(userinfo_url,'GET')[1]
+
     data = json.loads(result)
+
+    if _DEBUG:
+        print
+        print "fbconnect(): data={}".format(data)
+        print
 
     login_session['provider'] = 'facebook'
     login_session['username'] = data["name"]
@@ -239,13 +269,15 @@ def fbconnect():
     login_session['facebook_id'] = data["id"]
 
     # get user picture
-    url = "https://graph.facebook.com/v2.4/me/picture?%s&redirect=0&height=200&width=200".format(token)
+    picture_url = "https://graph.facebook.com/v2.4/me/picture?{}&redirect=0&height=200&width=200".format(token)
 
     h = httplib2.Http()
-    result = h.request(url,'GET')[1]
+    result = h.request(picture_url,'GET')[1]
     data = json.loads(result)
+    if _DEBUG:
+        print "fbconnect(): picture_url data={}".format(data)
 
-    login_session['picture'] = data["data"]["url"]
+    login_session['picture_url'] = data["data"]["url"]
 
     # see if user exists
     user_id= getUserID(login_session['email'])
@@ -258,8 +290,9 @@ def fbconnect():
     output += login_session['username']
     output += '!</h1>'
     output += '<img src="'
-    output += login_session['picture']
+    output += login_session['picture_url']
     output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
+
     flash("You are logged in as {}".format(login_session['username']))
 
     if _DEBUG:
@@ -272,24 +305,32 @@ def fbconnect():
 # DISCONNECT - Revoke a current user's token and reset their login_session
 @app.route('/gdisconnect')
 def gdisconnect():
-    for login_session_item in login_session:
-        print 'gdisconnect(): login_session_item= {}'.format(login_session_item)
+
+    if _DEBUG:
+        for login_session_item in login_session:
+            print 'gdisconnect(): login_session_item = {}'.format(login_session_item)
 
     access_token = login_session['access_token']
-    print "gdisconnect(): login_session['username']= {}".format(login_session['username'])
-    print "gdisconnect(): login_session['access_token']= {}".format(login_session['access_token'])
+
+    if _DEBUG:
+        print "gdisconnect(): login_session['username']= {}".format(login_session['username'])
+        print "gdisconnect(): login_session['access_token']= {}".format(login_session['access_token'])
 
     if access_token is None:
         response = make_response(json.dumps('Current user not connected.'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
 
-    url = 'https://accounts.google.com/o/oauth2/revoke?token={}'.format(access_token)
-    print "gdisconnect(): url={}".format(url)
+    url = "https://accounts.google.com/o/oauth2/revoke?token={}".format(access_token)
+
+    if _DEBUG:
+        print "gdisconnect(): url={}".format(url)
 
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
-    print 'gdisconnect(): result= {}'.format(result)
+
+    if _DEBUG:
+        print 'gdisconnect(): result= {}'.format(result)
 
     if result['status'] == '200':
         response = make_response(json.dumps('Successfully disconnected.'), 200)
@@ -300,9 +341,11 @@ def gdisconnect():
         response.headers['Content-Type'] = 'application/json'
         return response
 
+
 @app.route('/fbdisconnect')
 def fbdisconnect():
     facebook_id = login_session['facebook_id']
+
     # The access token must me included to successfully logout
     access_token = login_session['access_token']
     url = "https://graph.facebook.com/{}/permissions?access_token={}".format(facebook_id,access_token)
@@ -322,17 +365,18 @@ def disconnect():
         if login_session['provider'] == 'google':
             gdisconnect()
             del login_session['gplus_id']
-            del login_session['credentials']
         if login_session['provider'] == 'facebook':
             fbdisconnect()
             del login_session['facebook_id']
 
         del login_session['username']
         del login_session['email']
-        del login_session['picture']
+        del login_session['picture_url']
         del login_session['user_id']
         del login_session['provider']
+
         flash("You have successfully logged out.")
+
     else:
         flash("You are not logged in.")
 
@@ -423,18 +467,20 @@ def editFamily(family_id):
     if 'username' not in login_session:
         return redirect('/login/')
 
-    familyToEdit = session.query(Family).filter_by(id=family_id).one()
+    family = session.query(Family).filter_by(id=family_id).one()
 
-    if familyToEdit.user_id != login_session['user_id']:
+    if family.user_id != login_session['user_id']:
         return "<script>function myFunction() {alert('You are not authorized to edit this pet family. Please create your own pet family to edit.');}</script><body onload='myFunction()''>"
 
     if request.method == 'POST':
         if request.form['name']:
             family.name = request.form['name']
+            family.description = request.form['description']
+
             flash('Family Successfully Edited {}'.format(family.name))
             return redirect(url_for('showFamilies'))
     else:
-        return render_template('editFamily.html', family_id=family_id)
+        return render_template('editFamily.html', family=family)
 
 
 # Delete a Family entry
@@ -465,11 +511,20 @@ def showPets(family_id):
 
     family = session.query(Family).filter_by(id=family_id).one()
     pets = session.query(Pet).filter_by(family_id=family.id).all()
+
+    # get user information from the database
     creator = getUserInfo(family.user_id)
 
     if _DEBUG:
         print
-        print "showPets(): family={}".format(family)
+        print "showPets(): creator.id = {}".format(creator.id)
+        print "\tshowPets(): creator.name = {}".format(creator.name)
+        print "\tshowPets(): creator.picture_url = {}".format(creator.picture_url)
+        print
+
+    if _DEBUG:
+        print
+        print "showPets(): family.user_id = {}".format(family.user_id)
         print "showPets(): creator={}".format(creator)
         print
         for pet in pets:
@@ -492,58 +547,67 @@ def showPets(family_id):
     Inside your templates you can now use {{creator.picture}}} and {{creator.username}} to share the name and picture of each pet creator.
     '''
 
-    if 'username' not in login_session or creator.id != login_session['user_id']:
+    if 'username' not in login_session or \
+        creator.id != login_session['user_id']:
+
         return render_template('public_pets.html', family=family, pets=pets, creator=creator)
     else:
         return render_template('pets.html', family=family, pets=pets, creator=creator)
 
 
-# Create a new menu item
+# Create a new pet
 @app.route('/family/<int:family_id>/pets/new/', methods=['GET', 'POST'])
 def newPet(family_id):
     if 'username' not in login_session:
         return redirect('/login/')
 
-    pet = session.query(Family).filter_by(id=family_id).one()
+    family = session.query(Family).filter_by(id=family_id).one()
 
-    if pet.user_id != login_session['user_id']:
-        return "<script>function myFunction() {alert('You are not authorized to create this pet''s menus. Please create your own pet in order to create new menus.');}</script><body onload='myFunction()''>"
+    if family.user_id != login_session['user_id']:
+        return "<script>function myFunction() {alert('You are not authorized to create a new pet. Please login to create new pet.');}</script><body onload='myFunction()''>"
 
     if request.method == 'POST':
-        newItem = MenuItem(name=request.form['name'], description=request.form['description'], family_id=family_id, user_id=family.user_id)
-        session.add(newItem)
+        newPet = Pet(name=request.form['name'], description=request.form['description'], family_id=family.id, user_id=family.user_id)
+        session.add(newPet)
         session.commit()
-        flash('Pet {} Successfully Created'.format(pet.name))
-        return redirect(url_for('showPets', pet_id=pet_id))
+        flash('Pet {} Successfully Created'.format(newPet.name))
+        return redirect(url_for('showPets', family_id=family.id))
     else:
-        return render_template('newPet.html', family_id=family_id)
+        return render_template('newPet.html', family=family)
 
 # Edit a Pet
 @app.route('/family/<int:family_id>/pets/<int:pet_id>/edit/', methods=['GET', 'POST'])
 def editPet(family_id, pet_id):
+
     if 'username' not in login_session:
         return redirect('/login/')
 
-    editPet = session.query(Pet).filter_by(id=pet_id).one()
+    petToEdit = session.query(Pet).filter_by(id=pet_id).one()
 
-    if editPet.user_id != login_session['user_id']:
+    if petToEdit.user_id != login_session['user_id']:
         return "<script>function myFunction() {alert('You are not authorized to edit this pet. Please create your own pet to edit.');}</script><body onload='myFunction()''>"
-
-    editedPet = session.query(Pet).filter_by(id=pet_id).one()
 
     if request.method == 'POST':
         if request.form['name']:
-            editedItem.name = request.form['name']
+            petToEdit.name = request.form['name']
+        if request.form['breed']:
+            petToEdit.breed = request.form['breed']
+        if request.form['gender']:
+            petToEdit.gender = request.form['gender']
+        if request.form['age']:
+            petToEdit.age = request.form['age']
+        if request.form['special_needs']:
+            petToEdit.special_needs = request.form['special_needs']
         if request.form['description']:
-            editedItem.description = request.form['description']
-
-        session.add(editedPet)
+            petToEdit.description = request.form['description']
+        session.add(petToEdit)
         session.commit()
 
         flash('Pet Successfully Edited')
-        return redirect(url_for('showPets', pet_id=pet_id))
+
+        return redirect(url_for('showPets', family_id=family_id))
     else:
-        return render_template('editPet.html', family_id=family_id, pet_id=pet_id, pet=editedPet)
+        return render_template('editPet.html', pet=petToEdit)
 
 
 # Delete a Pet
@@ -554,7 +618,7 @@ def deletePet(family_id, pet_id):
         return redirect('/login/')
 
     #petFamily = session.query(Family).filter_by(id=family_id).all()
-    petToDelete = session.query(Pets).filter_by(id=pet_id).one()
+    petToDelete = session.query(Pet).filter_by(id=pet_id).one()
 
     if petToDelete.user_id != login_session['user_id']:
         return "<script>function myFunction() {alert('You are not authorized to delete this pet. Please create your own pet to delete.');}</script><body onload='myFunction()''>"
@@ -562,31 +626,70 @@ def deletePet(family_id, pet_id):
     if request.method == 'POST':
         session.delete(petToDelete)
         session.commit()
-        flash('Pet Successfully Deleted')
+
+        flash("Pet Successfully Deleted")
+
         return redirect(url_for('showPets', family_id=petToDelete.family_id))
     else:
         return render_template('deletePet.html', pet=petToDelete)
 
 def getUserID(email):
+    '''
+        getUserID(email) - retrieve user's application-assigned id from the database
+
+        Argument: user's email address
+
+        Return: User id if user record exists in the database
+                None if user record does not exist in the database
+    '''
     try:
-        user = session.query(User).filter_by(email = email).one()
+        user = session.query(User).filter_by(email=email).one()
         return user.id
     except:
         return None
 
 
 def getUserInfo(user_id):
-    user = session.query(User).filter_by(id = user_id).one()
+    '''
+        getUserInfo(user_id) - retrieve user data from the database
+
+        Argument: user id
+
+        Return: User object
+    '''
+    user = session.query(User).filter_by(id=user_id).one()
+    if _DEBUG:
+        print
+        print "getUserInfo(user_id): user.id = {}".format(user.id)
+        print "\tgetUserInfo(user_id): user.name = {}".format(user.name)
+        print "\tgetUserInfo(user_id): user.picture_url = {}".format(user.picture_url)
+        print
     return user
 
 
 def createUser(login_session):
-    newUser = User(name = login_session['username'], email = login_session['email'], picture = login_session['picture'])
+    '''
+        createUser(login_session) - create a user in the application's database
+
+        Argument: login_session object (contains inforamtion about the user from the resource (i.e., g+, Facebook, etc.))
+
+        Return: User id if user record exists in the database
+                None if user record does not exist in the database
+    '''
+    newUser = User(name=login_session['username'],
+                   email=login_session['email'],
+                   picture_url=login_session['picture_url'])
     session.add(newUser)
     session.commit()
-    user = session.query(User).filter_by(email = login_session['email']).one()
-    return user.id
 
+    try:
+        user = session.query(User).filter_by(email=login_session['email']).one()
+        return user.id
+    except:
+        if _DEBUG:
+            print "EXCEPTION!: User record not found in the database."
+            print "createUser(login_session)): email = {}".format(login_session['email'])
+        return None
 
 
 if __name__ == '__main__':

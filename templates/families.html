@@ -1,8 +1,11 @@
-<!-- families.html
+<!--
+    families.html
+
         User has been logged in. All CRUD capability is available to the user.
 
         Login prompt is not displayed.
 
+        Argument: families
 -->
 {% extends "main.html" %}
 {% block content %}
@@ -35,7 +38,11 @@
 			{% endif %}
 		{% endwith %}
 	</div>
-	
+
+    <!-- need this blue divider within the flash message... -->
+	<div class="row divider blue">
+		<div class="col-md-12"></div>
+	</div>
 
 	<div class="row padding-top padding-bottom">
 		<div class="col-md-1"></div>
@@ -50,14 +57,14 @@
 	</div>
 
 	{% for family in families %}
-		<a href = "{{url_for('showPets', family_id=family.id)}}">
-			<div class="row">
-				<div class="col-md-1"></div>
-					<div class="col-md-10 family-list">
-						<h3>{{family.name}}</h3>
-					</div>
-				<div class="col-md-1"></div>
-			</div>
-		</a>
+    <a href = "{{url_for('showPets', family_id=family.id)}}">
+        <div class="row">
+            <div class="col-md-1"></div>
+                <div class="col-md-10 family-list">
+                    <h3>{{family.name}}</h3>
+                </div>
+            <div class="col-md-1"></div>
+        </div>
+    </a>
 	{% endfor %}
 {% endblock %}
