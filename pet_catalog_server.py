@@ -38,28 +38,54 @@ session = DBSession()
 
 
 # Create anti-forgery state token
-@app.route('/login/')
-def showLogin():
+#@app.route('/login/')
+#def showLogin():
+#    '''
+#    showLogin() - create a 'random' state variable and display the login prompts via html
+#
+#    Arguments: None
+#
+#    Return: render the login HTML page; returns to TODO
+#
+#    '''
+#    state = ''.join(random.choice(string.ascii_uppercase + string.digits)
+#                    for x in xrange(32))
+#    login_session['state'] = state
+#
+#    # these should probably be temporary placeholders
+#    #login_session['username'] = "UNK"
+#    #login_session['email'] = "UNK"
+#    #login_session['picture_url'] = "UNK"
+#    #login_session['user_id'] = "UNK"
+#    #login_session['provider'] = "UNK"
+#
+#    return render_template('login.html', STATE=state)
+
+# Show all pet families
+@app.route('/')
+@app.route('/families/')
+def showFamilies():
     '''
-    showLogin() - create a 'random' state variable and display the login prompts via html
+        showFamilies() - Display ... TODO
 
-    Arguments: None
+        Argument: None
 
-    Return: render the login HTML page; returns to TODO
-
+        Return: TODO
     '''
-    state = ''.join(random.choice(string.ascii_uppercase + string.digits)
-                    for x in xrange(32))
+    # get list of defined Pet Families
+    families = session.query(Family).order_by(asc(Family.name))
+
+    # Generate state variable for login token exchange
+    state = ''.join(random.choice(string.ascii_uppercase + string.digits) for
+                    x in xrange(32))
     login_session['state'] = state
-
-    # these should probably be temporary placeholders
-    #login_session['username'] = "UNK"
-    #login_session['email'] = "UNK"
-    #login_session['picture_url'] = "UNK"
-    #login_session['user_id'] = "UNK"
-    #login_session['provider'] = "UNK"
-
-    return render_template('login.html', STATE=state)
+    # If user is logged in display Pet Families and Pets with create, edit, an delete capability
+    # If user is not logged in display Pet Families and Pets with no add, delete, or edit capability
+    if 'user_id' in login_session:
+        user = getUserInfo(login_session['user_id'])
+        return render_template('families.html', families=families, STATE=state)
+    else:
+        return render_template('public_families.html', families=families, STATE=state)
 
 
 @app.route('/gconnect', methods=['POST'])
@@ -428,21 +454,6 @@ def familiesJSON():
 
     return jsonify(Family_Information = [family.serialize for family in families])
 
-# Show all pet families
-@app.route('/')
-@app.route('/families/')
-def showFamilies():
-
-    families = session.query(Family).order_by(asc(Family.name))
-
-    # if user is not logged-in, allow viewing...
-    #  ... but no create, update, or delete actions
-    if 'username' not in login_session:
-        return render_template('public_families.html', families=families)
-    else:
-        # if user is logged-in allow CRUD activity
-        return render_template('families.html', families=families)
-
 
 # Create a new pet Family
 @app.route('/family/new/', methods=['GET', 'POST'])
@@ -506,6 +517,7 @@ def deleteFamily(family_id):
 
 # Show a list of all Pets in a Family
 #  (i.e., Family=Dogs, Pet=Sasha, Pet=Jake, ...)
+@app.route('/family/<int:family_id>/')
 @app.route('/family/<int:family_id>/pets/')
 def showPets(family_id):
 

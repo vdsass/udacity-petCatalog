@@ -3,36 +3,14 @@
 	font-weight: 700;
 }
 
-/*#form {
-    background-color: #FFF;
-    height: 600px;
-    width: 600px;
-    margin-right: auto;
-    margin-left: auto;
-    margin-top: 0px;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    padding: 0px;
-    text-align:center;
-}
+/* class=label: working for labels on display pets */
 label {
-    font-family: Georgia, "Times New Roman", Times, serif;
-    font-size: 18px;
-    color: #333;
-    height: 20px;
-    width: 200px;
-    margin-top: 10px;
-    margin-left: 10px;
+    margin-top: 5px;
     text-align: right;
-    margin-right:15px;
+    clear: both;
     float:left;
+    margin-right:15px;
 }
-input {
-    height: 20px;
-    width: 300px;
-    border: 1px solid #000;
-    margin-top: 10px;
-}*/
 
 figure {
     display: inline-block;
@@ -88,31 +66,6 @@ a {
  	color: #0093B9;
  	line-height: 17px;
 }
-
-
-/*
-label {
-
-    text-align: right;
-    clear: both;
-    float:left;
-    margin-right:15px;
-}
-
-input {
-    height: 20px;
-    width: 300px;
-    border: 1px solid #000;
-    margin-top: 10px;
-    float: left;
-}
-
-input[type=button] {
-    float:none;
-}
-
-*/
-
 
 .padding-top {
 	padding-top: 30px;
@@ -171,16 +124,20 @@ input[type=button] {
 .divider.green {
 	background-color: #9FB80A;
 }
+
+/* .row.banner.main vs. .banner.main TODO */
 .row.banner.main {
     text-align: center;
     font-weight: bolder;
 }
+
+
 .banner.main {
-	height: 400px;
+	height: 500px;
 	background: url("/static/pets-banner.png");
-	background-position: right;
+	background-position: center;
 	background-repeat: no-repeat;
-	background-size: cover;
+	background-size: contain;
 }
 .banner.menu {
 	height: 150px;
@@ -194,14 +151,17 @@ input[type=button] {
 .banner h1 {
 	margin: 45px 0;
 }
- .family-list {
+
+.family-list {
  	background-color: #F0F0F0;
  	padding: 20px;
-u }
- .family-list:hover {
+}
+
+.family-list:hover {
  	background-color: #e1e17f;
  	padding: 20px;
 }
+
 .pet {
 	background: #F0F0F0;
 	padding: 20px;
@@ -229,13 +189,11 @@ u }
 	background-color: #98FB98;
 	width:100%;
 	text-decoration: none;
-
 }
 
 .flash li {
 	list-style-type: none;
 	text-align: center;
-
 }
 
 

@@ -1,28 +1,217 @@
+<!DOCTYPE html>
 <!--
     main.html
 -->
-<!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>Pet Catalog</title>
-        <!-- Google API -->
-        <link href='http://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
-        <!-- Bootstrap API -->
-        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-        <!-- Pet Catalog Styles -->
-        <link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
-    </head>
-    <body>
-        <div class="container">
-            {% block content %}
-            {% endblock %}
+<head>
+    <title>Pet Catalog</title>
+    <meta charset="utf-8">
+    <!-- Google API -->
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
+    <!-- Google Plus sign in -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script src="//apis.google.com/js/platform.js?onload=start"></script>
+    <!-- Bootstrap API -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <!-- Pet Catalog Styles -->
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <!--
+        Facebook and Google+ scripts need to be inside <body> in order to access
+        the STATE variable
+    -->
+    <!--Facebook sign in -->
+    <script>
+        window.fbAsyncInit = function() {
+            FB.init({
+              appId      : '1057960334259992',
+              cookie     : true,  // cookies allow the server to access the session
+              xfbml      : true,  // parse social plugins on this page
+              version    : 'v2.5' // use version 2.5
+            });
+        };
+
+        // Load the SDK asynchronously
+        (function(d, s, id) {
+          var js, fjs = d.getElementsByTagName(s)[0];
+          if (d.getElementById(id)) return;
+          js = d.createElement(s); js.id = id;
+          js.src = "//connect.facebook.net/en_US/sdk.js";
+          fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+
+        // Facebook
+        // Run a test of the Graph API after login is successful.
+        // See statusChangeCallback() for when this call is made.
+        function sendTokenToServer() {
+            var access_token = FB.getAuthResponse()['accessToken'];
+
+            console.log(access_token)
+            console.log('Welcome!  Fetching your information.... ');
+
+            FB.api('/me', function(response) {
+
+                    console.log('Successful login for: ' + response.name);
+
+                $.ajax({
+                        type: 'POST',
+                        url: '/fbconnect?state={{STATE}}',
+                        processData: false,
+                        data: access_token,
+                        contentType: 'application/octet-stream; charset=utf-8',
+                        success: function(result) {
+                            // Handle or verify the server response if necessary.
+                            if (result) {
+
+                                //$('#result').html('Login Successful!</br>'+ result + '</br>Redirecting...')
+                                $('#result').html('Login Successful! Redirecting...</br>')
+
+                                setTimeout(function() { window.location.href = "/families";}, 1000);
+                            } else {
+                                $('#result').html('Failed to make a server-side call. Check your configuration and console.');
+                            }
+                        }
+                });
+            })
+        }
+    </script>
+
+    <script>
+        function signInCallback(authResult) {
+            // existence of 'code' implies success
+            if (authResult['code']) {
+
+                // hide the sign-in button now that the user is authorized
+                $('#signinButton').attr('style', 'display: none');
+
+                // Send the one-time-use code to the server, if the server responds, [write a 'login successful' message to the web page then] redirect to the main page
+
+                $.ajax({
+                        type: 'POST',
+                        url: '/gconnect?state={{STATE}}',
+                        processData: false,
+                        data: authResult['code'],
+                        contentType: 'application/octet-stream; charset=utf-8',
+                        // 200 code is success
+                        success: function(result) {
+                            console.log('AJAX success: result= ', result)
+                            // Handle or verify the server response if necessary.
+                            if (result) {
+
+                                //$('#result').html('Login Successful!</br>'+ result + '</br>Redirecting...')
+
+                                $('#result').html('Login Successful! Redirecting...')
+
+                                setTimeout(function() {
+                                    window.location.href = "/families";
+                                }, 1000);
+
+                            } else if (authResult['error']) {
+                                console.log('There was an error: ' + authResult['error']);
+                            } else {
+                                $('#result').html('Failed to make a server-side call. Check your configuration and console.');
+                            }
+                        }
+                });
+            }
+        }
+    </script>
+
+    <!-- Navigation bar -->
+    <div class="navbar navbar-inverse" role="navigation">
+      <div class="container">
+
+        <div class="navbar-header">
+
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+
+          <a class="navbar-brand" href="/">Pet Catalog</a>
+
         </div>
-        <!-- Facebook 'Like' symbols-->
-        <div
-          class="fb-like"
-          data-share="true"
-          data-width="450"
-          data-show-faces="true">
+
+        <div class="navbar-collapse collapse">
+
+          <!--<ul class="nav navbar-nav">-->
+          <!--  <li><a href="/">Pet Families</a></li>-->
+          <!--</ul>-->
+
+          <ul class="nav navbar-nav navbar-right list-inline">
+            {% if not user %}
+              <li>
+                <div class="signinButton">
+                  <fb:login-button size="large" scope="public_profile,email" onlogin="sendTokenToServer();">Log In
+                  </fb:login-button>
+                </div>
+              </li>
+
+              <li>
+                <div class="signinButton">
+                  <span class = "g-signin"
+                    data-scope = "openid email"
+                    data-clientid = "870482548020-fbh27a4od9rk31c1f6bn2cshomtsclnj.apps.googleusercontent.com"
+                    data-redirecturi = "postmessage"
+                    data-accesstype = "offline"
+                    data-cookiepolicy = "single_host_origin"
+                    data-callback = "signInCallback"
+                    data-approvalprompt = "force" >
+                  </span>
+                </div>
+              </li>
+
+            {% else %}
+
+              <li>
+                <ul id="user-name">
+                  <li>{{ user.name }}</li>
+                  <li><a href="/disconnect">Log Out</a></li>
+                </ul>
+              </li>
+
+              <li>
+                <div id="user-picture">
+                  <img src= {{ user.picture }}>
+                </div>
+              </li>
+
+            {% endif %}
+
+          </ul>
         </div>
-    </body>
+      </div>
+    </div>
+
+    <div id="result"></div>
+
+    <!-- Display the Pet Family Banner -->
+	<div class="row banner main">
+		<div class="col-md-1"></div>
+		<div class="col-md-12 padding-none">
+			<h1>Pet Families</h1>
+		</div>
+	</div>
+
+    <!-- Sign in/out messages -->
+    <div class="container">
+      {% for message in get_flashed_messages() %}
+        <div class="alert alert-warning">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+
+    <!-- Secondary (“child”) templates insert html into this empty block -->
+    <div id="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+</body>
 </html>
