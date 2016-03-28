@@ -45,10 +45,45 @@ The following step is optional. The application allows you to create your own Pe
 
 Type **python pet_catalog_server.py** to run the Flask web server. In your browser visit **http://localhost:8000** to view the Pet Catalog list of Pet Families.  You should be able to view, add, edit, and delete Pet Families and Pets.
 
-Issues:
+
+Third Party Login
+
+Pet Catalog will allow create, update, and delete operations on the database only when a user is logged in (signed on). Google Plus (G+) and Facebook are used by Pet Catalog for third-party verification, authentication, and login.
+
+See the developer's pages on Google and Facebook for credetials setup (https://developers.google.com/api-client-library/python/auth/web-app#overview).
+
+pet_catalog_server.py uses two files to acquire verification information. One file for Google Plus (gplus_client_secrets.json) and one file for Facebook verification and authentication (fb_client_secrets.json). The two files are in the application's root directory and contain placeholders for the respective values.
+
+Update the gplus_client_secrets.json file with your 'client_id' and 'client_secret.' Also, note the project_id name, the redirect_uris, and javascript_origins paths.
+Update the fb_client_secrets.json file with your 'app_id' and 'app_secret.'
+
+
+Google Plus - Example gplus_client_secrets.json file
+
+{"web": { "client_id":"YOUR GOOGLE CLIENT ID",
+		  "project_id":"petcatalog",
+		  "auth_uri":"https://accounts.google.com/o/oauth2/auth",
+		  "token_uri":"https://accounts.google.com/o/oauth2/token",
+		  "auth_provider_x509cert_url":"https://www.googleapis.com/oauth2/v1/certs",
+		  "client_secret":"YOUR GOOGLE CLIENT SECRET",
+		  "redirect_uris":["http://localhost:8000/gconnect"],
+		  "javascript_origins":["http://localhost:8000"]
+		}
+}
+
+Facebook - Example fb_client_secrets.json file
+
+{"app": {
+            "app_id":"YOUR FACEBOOK APP ID",
+            "app_secret":"YOUR FACEBOOK APP SECRET"
+        }
+}
+
+
+Known Issues:
 1. Navigation bar:
     a. Figure out how to write messages to the navigation bar.
-    b. Clear the login buttons on child pages.
+    b. Clear the login buttons on child pages, or
         i. the buttons should indicate 'Log off', 'Log out', ...
 
 2. Login:
@@ -59,22 +94,13 @@ Issues:
     a. 'row' width is too wide.
 
 4. Family of Pet <Family Name> (i.e., Cats, Dogs, ...)
-    a. Occassionally, 'None' is displayed after banner
-    b. Edit, Remove, Add buttons need to be justified right
+    a. Edit, Remove, Add buttons need to be justified consistently
         i. and change color appropriately
-
-    c. Add labeling that displays each pet's information
-    d. Pet Families look OK. Need larger font and separation between rows
-        i. length of 'row' is what I want
+    b. Add labeling that displays each pet's information
 
 5. New Family - Add Pet to the Family of <>
-    a. Add button needs space after description text block.
-    b. Field Labels are not in-line with field
+    a. Field Labels are not in-line with field
 
 6. Add A Pet
     x. Supply all fields
-
-6. Delete Pet
-    x. deletes record on Cancel
-    x. does not delete record on Remove
 

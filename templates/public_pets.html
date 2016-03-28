@@ -20,22 +20,63 @@
 
 	<!-- display pets -->
 	{% for pet in pets %}
-		<div class="pet">
+		<div class="pets">
+			<div class="row padding-top padding-bottom">
+				<div class="col-md-1"></div>
+					<div class="col-md-10">
 
-			<h2>{{ pet.name }}</h2>
-			<h3>{{ pet.breed }}</h3>
-			<h3>{{ pet.gender }}</h3>
-			<h3>{{ pet.age }}</h3>
-			<p>{{ pet.description }}</p>
-			<p>{{ pet.special_needs }}</p>
+						<label for="name">Name:</label>
+						<div class="controls">
+							<p class="form-control-static" name="name">{{ pet.name }}</p>
+						</div>
 
-			<div class="pet_image">
-				<figure>
-					<img src="{{ pet.image_url }}"  alt="Photo of {{ pet.name }}">
-					<figcaption>{{ pet.name }}</figcaption>
-				</figure>
+						{% if pet.breed %}
+						<label for="breed">Breed:</label>
+						<div class="controls">
+							<p class="form-control-static" name="breed">{{ pet.breed }}</p>
+						</div>
+						{% endif %}
+
+						{% if pet.gender %}
+						<label for="gender">Gender:</label>
+						<div class="controls">
+							<p class="form-control-static" name="gender">{{ pet.gender }}</p>
+						</div>
+						{% endif %}
+
+						{% if pet.age %}
+						<label for="age">Age:</label>
+						<div class="controls">
+							<p class="form-control-static" name="age">{{ pet.age }}</p>
+						</div>
+						{% endif %}
+
+						{% if pet.special_needs %}
+						<label for="special_needs">Special Needs:</label>
+						<div class="controls">
+							<p class="form-control-static" name="special_needs">{{ pet.special_needs }}</p>
+						</div>
+						{% endif %}
+
+						{% if pet.description %}
+						<label for="description">Description:</label>
+						<div class="controls">
+							<p class="form-control-static" name="description">{{ pet.description }}</p>
+						</div>
+						{% endif %}
+
+						{% if pet.image_url %}
+						<div class="figure">
+							<figure>
+								<img src="{{ pet.image_url }}" alt="Photo of {{ pet.name }}">
+								<figcaption>{{ pet.name }}</figcaption>
+							</figure>
+						</div>
+						{% endif %}
+
+					</div>
+				<div class="col-md-1"></div>
 			</div>
-
 		</div>
 	{% endfor %}
 

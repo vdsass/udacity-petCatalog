@@ -7,26 +7,21 @@
 		Argument:	family, pets, creator
 -->
 
-	<div class="row banner menu vds-row-banner">
-		<div class="col-md-1"></div>
-		<div class="col-md-10 padding-none">
 
+	<div class="row banner menu">
+		<div class="col-md-11 col-md-offset-1 padding-none">
 			<h1>Family of Pet {{ family.name }}
-
 				<div class="creator">
 					<figure>
 						<img src="{{ creator.picture_url }}", alt="Creator photograph">
 						<figcaption>Created by: {{ creator.name }}</figcaption>
 					</figure>
 				</div>
-
 			</h1>
-
-			<!--<h2>{{ family.description }}</h2>-->
-
 		</div>
-		<div class="col-md-1"></div>
 	</div>
+	<div class="col-md-1"></div>
+
 
 	<div class="row padding-top padding-bottom">
 		<div class="col-md-1"></div>
@@ -60,45 +55,56 @@
 	<div class="pets">
 		<div class="row padding-top padding-bottom">
 			<div class="col-md-1"></div>
-				<div class="col-md-10 pet-list">
+				<div class="col-md-10">
 
 					<label for="name">Name:</label>
 					<div class="controls">
 						<p class="form-control-static" name="name">{{ pet.name }}</p>
 					</div>
 
+					{% if pet.breed %}
 					<label for="breed">Breed:</label>
 					<div class="controls">
 						<p class="form-control-static" name="breed">{{ pet.breed }}</p>
 					</div>
+					{% endif %}
 
+					{% if pet.gender %}
 					<label for="gender">Gender:</label>
 					<div class="controls">
 						<p class="form-control-static" name="gender">{{ pet.gender }}</p>
 					</div>
+					{% endif %}
 
+					{% if pet.age %}
 					<label for="age">Age:</label>
 					<div class="controls">
 						<p class="form-control-static" name="age">{{ pet.age }}</p>
 					</div>
+					{% endif %}
 
+					{% if pet.special_needs %}
 					<label for="special_needs">Special Needs:</label>
 					<div class="controls">
 						<p class="form-control-static" name="special_needs">{{ pet.special_needs }}</p>
 					</div>
+					{% endif %}
 
+					{% if pet.description %}
 					<label for="description">Description:</label>
 					<div class="controls">
 						<p class="form-control-static" name="description">{{ pet.description }}</p>
 					</div>
+					{% endif %}
 
-
+					{% if pet.image_url %}
 					<div class="figure">
 						<figure>
 							<img src="{{ pet.image_url }}" alt="Photo of {{ pet.name }}">
 							<figcaption>{{ pet.name }}</figcaption>
 						</figure>
 					</div>
+					{% endif %}
 
 
 					<div class="">

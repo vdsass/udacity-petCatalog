@@ -7,9 +7,12 @@
 label {
     margin-top: 2px;
     margin-bottom: 0px;
+
     text-align: right;
+
     clear: both;
     float: left;
+
     margin-right: 15px;
     font-size: 28px;
     font-weight: bold;
@@ -64,9 +67,10 @@ h3 {
 p {
     margin-top: 2px;
     margin-bottom: 0px;
+
  	font-family: "Helvetica Neue", Roboto, Helvetica, Arial, sans-serif;
  	font-size: 28px;
- 	color: #7B7573;
+ 	color: #0000cc;
  	line-height: 100%;
  	font-weight: normal;
 }
@@ -74,7 +78,7 @@ p {
 strong {
  	font-size: 28px;
  	line-height: 32px;
- 	color: #1a1919;
+ 	color: #0d0c0c;
 }
 
 a {
@@ -82,26 +86,7 @@ a {
  	color: #0093B9;
  	line-height: 17px;
 }
-.vds-warning:hover {
-	border-color: #ffff00;
-	color: #ffff66;
-}
-.vds-danger:hover {
-	border-color: #0033cc;
-	color: #0040ff;
-}
-.vds-navbar {
-    font-size: x-large;
-}
-.vds-signin-button {
-    margin-top: 15px;
-}
 
-.vds-homeicon {
-    /*font-family: "Helvetica Neue", Roboto, Helvetica, Arial, sans-serif;*/
-    font-size: x-large;
-    color: #ffffff;
-}
 .padding-top {
 	padding-top: 30px;
 }
@@ -226,16 +211,19 @@ a {
 	background: #F0F0F0;
 	padding: 20px;
 	margin: 20px;
-	margin-left: -20px;
+	/*margin-left: -20px;*/
 }
 
 .creator {
+    /*display: inline-block;*/
+
 	padding-right: 20px;
 	margin-top: -20px;
-	text-align: right;
-	float:right;
+	text-align: center;
+	float: right;
 }
 .creator img {
+
 	width: 100px;
 	border-radius: 50%;
 }
