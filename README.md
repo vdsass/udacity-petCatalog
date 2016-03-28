@@ -1,4 +1,4 @@
-# Pet_Catalog
+#Pet Catalog
 
 **Note:** If you already have a vagrant machine installed skip to the 'Fetch the Source Code and VM Configuration'
 
@@ -16,7 +16,7 @@ Vagrant is the software that configures the VM and lets you share files between 
 
 **Windows Note:** The Installer may ask you to grant network permissions to Vagrant or make a firewall exception. Be sure to allow this.
 
-## Fetch the Source Code and VM Configuration
+#Fetch the Source Code and VM Configuration
 
 **Windows:** Use the Git Bash program (installed with Git) to get a Unix-style terminal.  
 **Other systems:** Use your favorite terminal program.
@@ -31,7 +31,7 @@ This will create and populate a directory named **Pet_Catalog** complete with so
 
 Using the terminal, change directory to Pet_Catalog (**cd Pet_Catalog**), then type **vagrant up** to launch your virtual machine.
 
-## Running the Pet_Catalog Application
+# Run the Pet_Catalog Application
 
 When the virtual machine is running, type **vagrant ssh**. This will log your terminal into the virtual machine, and you'll get a Linux shell prompt. When you want to log out, type **exit** at the shell prompt.  To turn the virtual machine off (without deleting anything), type **vagrant halt**. If you do this, you'll need to run **vagrant up** again before you can log into it.
 
@@ -45,14 +45,13 @@ The following step is **optional**. The application allows you to create your ow
 
 Type **python pet_catalog_server.py** to run the Flask web server. In your browser visit **http://localhost:8000** to view the Pet Catalog list of Pet Families.  You should be able to view, add, edit, and delete Pet Families and Pets.
 
-
-Third Party Login
+## Third Party Login
 
 Pet Catalog will allow create, update, and delete operations on the database only when a user is logged in (signed on). Google Plus (G+) and Facebook are used by Pet Catalog for third-party verification, authentication, and login.
 
 See the developer's pages on Google and Facebook for credetials setup (https://developers.google.com/api-client-library/python/auth/web-app#overview).
 
-pet_catalog_server.py uses two files to acquire verification information. One file for Google Plus (gplus_client_secrets.json) and one file for Facebook verification and authentication (fb_client_secrets.json). The two files are in the application's root directory and contain placeholders for the respective values.
+pet_catalog_server.py uses two files to acquire verification information. One file for Google Plus **(gplus_client_secrets.json)** and one file for Facebook verification and authentication **(fb_client_secrets.json)**. The two files are in the application's root directory and contain placeholders for the respective values.
 
 Update the **gplus_client_secrets.json** file with your 'client_id' and 'client_secret.' Also, note the project_id name, the redirect_uris, and javascript_origins paths.
 
@@ -61,6 +60,7 @@ Update the **fb_client_secrets.json** file with your 'app_id' and 'app_secret.'
 
 Google Plus - Example gplus_client_secrets.json file
 
+```
 {"web": { "client_id":"YOUR GOOGLE CLIENT ID",
 		  "project_id":"petcatalog",
 		  "auth_uri":"https://accounts.google.com/o/oauth2/auth",
@@ -71,17 +71,25 @@ Google Plus - Example gplus_client_secrets.json file
 		  "javascript_origins":["http://localhost:8000"]
 		}
 }
+```
 
 Facebook - Example fb_client_secrets.json file
-
+```
 {"app": {
             "app_id":"YOUR FACEBOOK APP ID",
             "app_secret":"YOUR FACEBOOK APP SECRET"
         }
 }
+```
+## json end points
 
-
-Known Issues:
+Verify json end points by navigating to the following URLs:
+```
+    http://localhost:8000/families/json/
+    http://localhost:8000/family/n/pets/json/
+        Where 'n' is the family id of the Pet Family
+```
+# Known Issues:
 1. Navigation bar:
     a. Figure out how to write messages to the navigation bar.
     b. Clear the login buttons on child pages, or
