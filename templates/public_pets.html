@@ -5,20 +5,9 @@
 
 	Arguments:	family, pets, creator
 -->
-	<div class="row divider green">
-		<div class="col-md-12"></div>
-	</div>
-
 	<div class="row banner menu">
 		<div class="col-md-11 col-md-offset-1 padding-none">
 			<h1>Family of Pet {{ family.name }}
-
-<!--				<div class="generic_pet">
-					<figure>
-						<img src="{{ family.image_url }}">
-					</figure>
-				</div>-->
-
 				<div class="creator">
 					<figure>
 						<img src="{{ creator.picture_url }}", alt="Creator photograph">
@@ -26,27 +15,6 @@
 					</figure>
 				</div>
 			</h1>
-		</div>
-	</div>
-
-	<div class="row padding-top padding-bottom">
-		<div class="col-md-1"></div>
-		<div class="col-md-11 padding-none">
-		</div>
-		<div class="col-md-7"></div>
-	</div>
-
-	<div class="row">
-		<div class="col-md-12">
-			{% with messages = get_flashed_messages() %}
-				{% if messages %}
-					<ul>
-						{% for message in messages %}
-							 <li> <strong> {{ message }} </strong> </li>
-						{% endfor %}
-					</ul>
-				{% endif %}
-			{% endwith %}
 		</div>
 	</div>
 

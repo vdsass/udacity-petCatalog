@@ -3,18 +3,22 @@
 	font-weight: 700;
 }
 
-/* class=label: working for labels on display pets */
+/* tag "label" working for labels on display pets ?*/
 label {
-    margin-top: 5px;
+    margin-top: 2px;
+    margin-bottom: 0px;
     text-align: right;
     clear: both;
-    float:left;
-    margin-right:15px;
+    float: left;
+    margin-right: 15px;
+    font-size: 28px;
+    font-weight: bold;
+    border: none;
 }
 
 figure {
     display: inline-block;
-    border: hidden;
+    border: none;
     margin: 5px; /* adjust as needed */
 }
 
@@ -23,7 +27,7 @@ figure img {
 }
 
 figure figcaption {
-    border: hidden;
+    border: none;
     text-align: center;
 }
 
@@ -36,29 +40,41 @@ h1 {
 }
 
 h2 {
+    margin-top: 4px;
+    margin-bottom: 4px;
+
 	font-size: 24px;
 	color: #42C3C9;
+
 	line-height: 29px;
+
+    border: none;
+
 }
 
 h3 {
+    margin-top: 4px;
+    margin-bottom: 4px;
+
 	font-size: 18px;
 	color: #4A4A4A;
 	line-height: 23px;
 }
 
 p {
+    margin-top: 2px;
+    margin-bottom: 0px;
  	font-family: "Helvetica Neue", Roboto, Helvetica, Arial, sans-serif;
- 	font-size: 16px;
+ 	font-size: 28px;
  	color: #7B7573;
- 	line-height: 24px;
- 	font-weight: 400;
+ 	line-height: 100%;
+ 	font-weight: normal;
 }
 
 strong {
- 	font-size: 16px;
- 	color: #7B7573;
- 	line-height: 24px;
+ 	font-size: 28px;
+ 	line-height: 32px;
+ 	color: #1a1919;
 }
 
 a {
@@ -66,7 +82,26 @@ a {
  	color: #0093B9;
  	line-height: 17px;
 }
+.vds-warning:hover {
+	border-color: #ffff00;
+	color: #ffff66;
+}
+.vds-danger:hover {
+	border-color: #0033cc;
+	color: #0040ff;
+}
+.vds-navbar {
+    font-size: x-large;
+}
+.vds-signin-button {
+    margin-top: 15px;
+}
 
+.vds-homeicon {
+    /*font-family: "Helvetica Neue", Roboto, Helvetica, Arial, sans-serif;*/
+    font-size: x-large;
+    color: #ffffff;
+}
 .padding-top {
 	padding-top: 30px;
 }
@@ -82,20 +117,45 @@ a {
 .btn {
 	padding: 20px;
 	margin: 0;
-	border-color: #9FB80A;
+	border-color: #0033cc;
 	border-width: 2px;
-	color: #9FB80A;;
+	color: #1a53ff;
 }
 .btn:hover {
-	border-color: #9FB80A;
+	border-color: #0033cc;
+	color: #0040ff;
 }
 .btn.delete {
 	border-color: #aaaaaa;
-	color: #aaaaaa;
+	color: #ff0000;
 }
 .btn.delete:hover {
 	border-color: #aaaaaa;
 	color: red;
+}
+.btn.remove {
+	border-color: #aaaaaa;
+	color: #ff0000;
+}
+.btn.remove:hover {
+	border-color: #aaaaaa;
+	color: red;
+}
+.btn.cancel {
+	border-color: #808080;
+	color: #808080;
+}
+.btn.cancel:hover {
+	border-color: #000000;
+	color: #000000;
+}
+.btn.create {
+	border-color: #aaaaaa;
+	color: #aaaaaa;
+}
+.btn.create:hover {
+	border-color: #0000ff;
+	color: #6666ff;
 }
 .glyphicon {
 	margin-right: 10px;
@@ -131,7 +191,6 @@ a {
     font-weight: bolder;
 }
 
-
 .banner.main {
 	height: 500px;
 	background: url("/static/pets-banner.png");
@@ -141,24 +200,25 @@ a {
 }
 .banner.menu {
 	height: 150px;
-	background-color: #E1E17F;
+	background-color: #ccebff;
 }
 .banner.profile {
 	height: 150px;
-/*	background-color: #A6E8EB;*/
-    background-color: RED;
+    background-color: #A6E8EB;
 }
 .banner h1 {
 	margin: 45px 0;
 }
 
 .family-list {
+    margin-top: 5px;
+    margin-bottom: 5px;
  	background-color: #F0F0F0;
  	padding: 20px;
 }
 
 .family-list:hover {
- 	background-color: #e1e17f;
+ 	background-color: #3366ff;
  	padding: 20px;
 }
 
@@ -182,13 +242,14 @@ a {
 .creator figcaption {
 	font-size: 14px;
 	color: #7B7573;
-	font-weight: 400;
+	font-weight: bold;
 	margin-top: -20px;
 }
 .flash {
-	background-color: #98FB98;
+	background-color: #ffffff;
 	width:100%;
 	text-decoration: none;
+    right: auto;
 }
 
 .flash li {
