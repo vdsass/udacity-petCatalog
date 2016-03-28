@@ -25,7 +25,7 @@ From the terminal, run:
 
     git clone https://github.com/vdsass/udacity-petCatalog.git
 
-This will create and populate a directory structure named **Pet_Catalog** complete with source code.
+This will create and populate a directory named **Pet_Catalog** complete with source code.
 
 ## Run the virtual machine!
 
@@ -41,7 +41,7 @@ Type **ls** to ensure that you are inside the directory that contains pet_catalo
 
 Type **python pet_catalog_creator.py** to initialize a 'sqlite' database.
 
-The following step is optional. The application allows you to create your own Pet Families and individual Pets. If you want a pre-defined set of Pet Families and Pets type **python pet_catalog_loader.py** to populate the sqlite database with a few entries.
+The following step is **optional**. The application allows you to create your own Pet Families and individual Pets. If you want a pre-defined set of Pet Families and Pets type **python pet_catalog_loader.py** to populate the sqlite database with a few entries.
 
 Type **python pet_catalog_server.py** to run the Flask web server. In your browser visit **http://localhost:8000** to view the Pet Catalog list of Pet Families.  You should be able to view, add, edit, and delete Pet Families and Pets.
 
@@ -54,8 +54,9 @@ See the developer's pages on Google and Facebook for credetials setup (https://d
 
 pet_catalog_server.py uses two files to acquire verification information. One file for Google Plus (gplus_client_secrets.json) and one file for Facebook verification and authentication (fb_client_secrets.json). The two files are in the application's root directory and contain placeholders for the respective values.
 
-Update the gplus_client_secrets.json file with your 'client_id' and 'client_secret.' Also, note the project_id name, the redirect_uris, and javascript_origins paths.
-Update the fb_client_secrets.json file with your 'app_id' and 'app_secret.'
+Update the **gplus_client_secrets.json** file with your 'client_id' and 'client_secret.' Also, note the project_id name, the redirect_uris, and javascript_origins paths.
+
+Update the **fb_client_secrets.json** file with your 'app_id' and 'app_secret.'
 
 
 Google Plus - Example gplus_client_secrets.json file
@@ -96,11 +97,5 @@ Known Issues:
 4. Family of Pet <Family Name> (i.e., Cats, Dogs, ...)
     a. Edit, Remove, Add buttons need to be justified consistently
         i. and change color appropriately
-    b. Add labeling that displays each pet's information
 
-5. New Family - Add Pet to the Family of <>
-    a. Field Labels are not in-line with field
-
-6. Add A Pet
-    x. Supply all fields
 
