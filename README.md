@@ -1,6 +1,6 @@
 # Pet_Catalog
 
-**Note: If you already have a vagrant machine installed skip to the 'Fetch the Source Code and VM Configuration' section**
+**Note:** If you already have a vagrant machine installed skip to the 'Fetch the Source Code and VM Configuration'
 
 You need to use a virtual machine (VM) to run a web server and a web app that uses it. The VM is a Linux system that runs on top of your own machine.  You can share files easily between your computer and the VM.
 
