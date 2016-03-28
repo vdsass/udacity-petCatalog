@@ -3,7 +3,28 @@
 	font-weight: 700;
 }
 
-/* tag "label" working for labels on display pets ?*/
+.vds-warning:hover {
+	border-color: #ffff00;
+	color: #ffff66;
+}
+.vds-danger:hover {
+	border-color: #0033cc;
+	color: #0040ff;
+}
+.vds-navbar {
+    font-size: x-large;
+}
+.vds-signin-button {
+    margin-top: 15px;
+}
+
+.vds-homeicon {
+    /*font-family: "Helvetica Neue", Roboto, Helvetica, Arial, sans-serif;*/
+    font-size: x-large;
+    color: #ffffff;
+}
+
+
 label {
     margin-top: 2px;
     margin-bottom: 0px;
@@ -37,7 +58,7 @@ figure figcaption {
 h1 {
 	font-family: "Helvetica Neue Light", Roboto, Helvetica, Arial, sans-serif;
 	font-size: 50px;
-	color: #51453B;
+	color: #0f0d0b;
 	line-height: 60px;
 	font-weight: 300;
 }
