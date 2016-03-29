@@ -1,10 +1,16 @@
 #! /usr/bin/python
 # -*- coding: utf-8 -*-
-'''
+"""
 pet_catalog_server.py
+    Fulfills project P3 requirements for Udacity Full-Stack-Developer
 
+Revision History:
+  BY       DATE     REFERENCE   DESCRIPTION
+vdsass  2016-03-29   2016-001   Fix request.get_data() bug in delete_pet();
+                                Change naming of def's and file dependencies to
+                                conform with PEP-008.
 
-'''
+"""
 from flask import Flask, render_template, request, redirect, jsonify
 from flask import make_response, url_for, flash
 from flask import session as login_session
@@ -42,15 +48,15 @@ session = DBSession()
 # Show all pet families
 @app.route('/')
 @app.route('/families/')
-def showFamilies():
-    '''
-        showFamilies() - Main display for the Pet Families application. Shows the Pet Families defined in the database.
+def show_families():
+    """
+        show_families() - Main display for the Pet Families application. Shows the Pet Families defined in the database.
 
         Argument: None
 
         Return: render_template 'families.html'for full CRUD access
                 render_template 'public_families.html' for read-only access
-    '''
+    """
     login_status = get_login_status()
 
     # get list of defined Pet Families
@@ -64,7 +70,7 @@ def showFamilies():
     # If user is logged in display Pet Families and Pets with create, edit, an delete capability
     # If user is not logged in display Pet Families and Pets with no add, delete, or edit capability
     if 'user_id' in login_session:
-        user = getUserInfo(login_session['user_id'])
+        user = get_user_info(login_session['user_id'])
         return render_template('families.html', families=families, STATE=state)
     else:
         return render_template('public_families.html', families=families, STATE=state)
@@ -72,13 +78,13 @@ def showFamilies():
 
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
-    '''
+    """
         gconnect() - Google Plus login and connection logic
 
         Argument: None
 
         Return: html login welcome message
-    '''
+    """
     if _DEBUG:
         print
         print "gconnect(): request.args.get('state')={}".format(request.args.get('state'))
@@ -183,13 +189,13 @@ def gconnect():
     user_id = getUserID(login_session['email'])
 
     if user_id is not None:
-        user_info = getUserInfo(user_id)
+        user_info = get_user_info(user_id)
         login_session['user_id'] = user_id
         if _DEBUG:
             print "gconnect(): User is registered! user_id={}".format(user_id)
             print "gconnect(): user_info={}".format(user_info)
     else:
-        new_user_id = createUser(login_session)
+        new_user_id = create_user(login_session)
         login_session['user_id'] = new_user_id
 
         if _DEBUG:
@@ -215,14 +221,14 @@ def gconnect():
 
 @app.route('/fbconnect', methods=['POST'])
 def fbconnect():
-    '''
+    """
         fbconnect() - Facebook login and connection logic
 
         Argument: None
 
         Return: render_template 'families.html'for full CRUD access
                 render_template 'public_families.html' for read-only access
-    '''
+    """
     if _DEBUG:
         print
         print "login_session = {}".format(login_session)
@@ -307,7 +313,7 @@ def fbconnect():
     # see if user exists
     user_id= getUserID(login_session['email'])
     if not user_id:
-        user_id = createUser(login_session)
+        user_id = create_user(login_session)
     login_session['user_id'] = user_id
 
     output = ''
@@ -328,13 +334,13 @@ def fbconnect():
 # DISCONNECT - Revoke a current user's token and reset their login_session
 @app.route('/gdisconnect')
 def gdisconnect():
-    '''
+    """
         gdisconnect() - Google Plus logout and disconnect
 
         Argument: None
 
         Return: response string
-    '''
+    """
     if _DEBUG:
         for login_session_item in login_session:
             print 'gdisconnect(): login_session_item = {}'.format(login_session_item)
@@ -373,13 +379,13 @@ def gdisconnect():
 
 @app.route('/fbdisconnect')
 def fbdisconnect():
-    '''
+    """
         fbdisconnect() - Facebook logout and disconnect
 
         Argument: None
 
         Return: redirect to home page
-    '''
+    """
     facebook_id = login_session['facebook_id']
 
     # The access token must be included to successfully logout
@@ -393,18 +399,18 @@ def fbdisconnect():
 
     h = httplib2.Http()
     result = h.request(url, 'DELETE')[1]
-    return redirect(url_for('showFamilies'))
+    return redirect(url_for('show_families'))
 
 
 @app.route('/disconnect')
 def disconnect():
-    '''
+    """
         disconnect() - Generic logout and disconnect. Calls appropriate login provider.
 
         Argument: None
 
         Return: redirect to home page
-    '''
+    """
     if 'provider' in login_session:
         if login_session['provider'] == 'Google':
             gdisconnect()
@@ -427,21 +433,21 @@ def disconnect():
         pass
         #flash("You are not signed in.")
 
-    return redirect(url_for('showFamilies'))
+    return redirect(url_for('show_families'))
 
 #
 # JavaScript Object Notation (json) APIs to view Family and Pet information
 #
 @app.route('/family/<int:family_id>/pets/json/')
-def petsJSON(family_id):
-    '''
-    petsJSON(family_id) - json list of individual pet entries that match the
+def pets_json(family_id):
+    """
+    pets_json(family_id) - json list of individual pet entries that match the
                             Family id (i.e., Dog)
 
     Argument: family_id
 
     Return: 'jsonified' version of information for Pets in a Family
-    '''
+    """
 
     pets = session.query(Pet).filter_by(family_id=family_id).all()
 
@@ -456,14 +462,14 @@ def petsJSON(family_id):
     return jsonify(Pet_Information = [pet.serialize for pet in pets])
 
 @app.route('/families/json/')
-def familiesJSON():
-    '''
-    familiesJSON() - json list of individual pet family entries
+def families_json():
+    """
+    families_json() - json list of individual pet family entries
 
     Argument: None
 
     Return: 'jsonified' version of information for Pet Families
-    '''
+    """
     families = session.query(Family).all()
 
     if _DEBUG:
@@ -478,41 +484,41 @@ def familiesJSON():
 
 # Create a new pet Family
 @app.route('/family/new/', methods=['GET', 'POST'])
-def newFamily():
-    '''
-        newFamily() - Create a new Family record in the database
+def new_family():
+    """
+        new_family() - Create a new Family record in the database
 
         Argument: None
 
         Return: GET:    render template to create a new Pet Family
                 POST:   redirect to home page
-    '''
+    """
     login_status = get_login_status()
 
     if 'username' not in login_session:
         return redirect('/families/')
 
     if request.method == 'POST':
-        newFamily = Family(name=request.form['name'], user_id=login_session['user_id'])
-        session.add(newFamily)
-        flash("New Family {} Successfully Created".format(newFamily.name))
+        new_family = Family(name=request.form['name'], user_id=login_session['user_id'])
+        session.add(new_family)
+        flash("New Family {} Successfully Created".format(new_family.name))
         session.commit()
-        return redirect(url_for("showFamilies"))
+        return redirect(url_for("show_families"))
     else:
-        return render_template("newFamily.html")
+        return render_template("new_family.html")
 
 # Edit a Family dB entry
 @app.route('/family/<int:family_id>/edit/', methods=['GET', 'POST'])
-def editFamily(family_id):
-    '''
-        editFamily(family_id) - Edit a Family record in the database
+def edit_family(family_id):
+    """
+        edit_family(family_id) - Edit a Family record in the database
 
         Argument: None
 
         Return: not signed in: redirect to home page
                 GET:    render template to create a new Pet Family
                 POST:   redirect to home page
-    '''
+    """
     login_status = get_login_status()
 
     if 'username' not in login_session:
@@ -529,16 +535,16 @@ def editFamily(family_id):
             family.description = request.form['description']
 
             flash('Family Successfully Edited {}'.format(family.name))
-            return redirect(url_for('showFamilies'))
+            return redirect(url_for('show_families'))
     else:
-        return render_template('editFamily.html', family=family)
+        return render_template('edit_family.html', family=family)
 
 
 # Delete a Family entry
 @app.route('/family/<int:family_id>/delete/', methods=['GET', 'POST'])
-def deleteFamily(family_id):
-    '''
-        deleteFamily(family_id) - Delete the Family record in the database
+def delete_family(family_id):
+    """
+        delete_family(family_id) - Delete the Family record in the database
                                     associated with the Family Id
 
         Argument: family_id
@@ -546,7 +552,7 @@ def deleteFamily(family_id):
         Return: not signed in: redirect to home page
                 POST: redirect to home page
                 GET:  render template to delete Family record
-    '''
+    """
     login_status = get_login_status()
 
     if 'username' not in login_session:
@@ -562,24 +568,24 @@ def deleteFamily(family_id):
         session.delete(familyEntryToDelete)
         session.commit()
         flash('{} Successfully Deleted'.format(familyEntryToDelete.name))
-        return redirect(url_for('showFamilies', families=families))
+        return redirect(url_for('show_families', families=families))
     else:
-        return render_template('deleteFamily.html', family=familyEntryToDelete)
+        return render_template('delete_family.html', family=familyEntryToDelete)
 
 
 # Show a list of all Pets in a Family
 #  (i.e., Family=Dogs, Pet=Sasha, Pet=Jake, ...)
 @app.route('/family/<int:family_id>/')
 @app.route('/family/<int:family_id>/pets/')
-def showPets(family_id):
-    '''
-        showPets(family_id) - Display a list of Pets associated with the Family Id
+def show_pets(family_id):
+    """
+        show_pets(family_id) - Display a list of Pets associated with the Family Id
 
         Argument: family_id
 
         Return: render template for public Pets page
                 render template for edit-able Pets page
-    '''
+    """
     login_status = get_login_status()
 
     if _DEBUG:
@@ -591,19 +597,19 @@ def showPets(family_id):
     pets = session.query(Pet).filter_by(family_id=family.id).all()
 
     # get user information from the database
-    creator = getUserInfo(family.user_id)
+    creator = get_user_info(family.user_id)
 
     if _DEBUG:
         print
-        print "showPets(): creator.id = {}".format(creator.id)
-        print "\tshowPets(): creator.name = {}".format(creator.name)
-        print "\tshowPets(): creator.picture_url = {}".format(creator.picture_url)
+        print "show_pets(): creator.id = {}".format(creator.id)
+        print "\tshow_pets(): creator.name = {}".format(creator.name)
+        print "\tshow_pets(): creator.picture_url = {}".format(creator.picture_url)
         print
 
     if _DEBUG:
         print
-        print "showPets(): family.user_id = {}".format(family.user_id)
-        print "showPets(): creator={}".format(creator)
+        print "show_pets(): family.user_id = {}".format(family.user_id)
+        print "show_pets(): creator={}".format(creator)
         print
         for pet in pets:
             print "pet.id = {}".format(pet.id)
@@ -622,13 +628,13 @@ def showPets(family_id):
 
 # Create a new pet
 @app.route('/family/<int:family_id>/pets/new/', methods=['GET', 'POST'])
-def newPet(family_id):
+def new_pet(family_id):
 
     login_status = get_login_status()
 
     if _DEBUG:
         print
-        print "newPet(): login_session = {}".format(login_session)
+        print "new_pet(): login_session = {}".format(login_session)
         print
 
     if 'username' not in login_session:
@@ -643,18 +649,18 @@ def newPet(family_id):
 
         if _DEBUG:
             print
-            print "newPet(): request.form[] = {}".format(request.form)
+            print "new_pet(): request.form[] = {}".format(request.form)
             print
 
-            print "newPet(): request.form.getlist('name') = {}".format(request.form.getlist('name'))[0]
-            print "newPet(): request.form.getlist('description') = {}".format(request.form.getlist('description'))[0]
-            print "newPet(): request.form.getlist('image_url') = {}".format(request.form.getlist('image_url'))[0]
-            print "newPet(): request.form.getlist('breed') = {}".format(request.form.getlist('breed'))[0]
-            print "newPet(): request.form.getlist('gender') = {}".format(request.form.getlist('gender'))[0]
-            print "newPet(): request.form.getlist('age') = {}".format(request.form.getlist('age'))[0]
-            print "newPet(): request.form.getlist('special_needs') = {}".format(request.form.getlist('special_needs'))[0]
-            print "newPet(): 'family_id' = {}".format(family.id)
-            print "newPet(): 'user_id' = {}".format(family.user_id)
+            print "new_pet(): request.form.getlist('name') = {}".format(request.form.getlist('name'))[0]
+            print "new_pet(): request.form.getlist('description') = {}".format(request.form.getlist('description'))[0]
+            print "new_pet(): request.form.getlist('image_url') = {}".format(request.form.getlist('image_url'))[0]
+            print "new_pet(): request.form.getlist('breed') = {}".format(request.form.getlist('breed'))[0]
+            print "new_pet(): request.form.getlist('gender') = {}".format(request.form.getlist('gender'))[0]
+            print "new_pet(): request.form.getlist('age') = {}".format(request.form.getlist('age'))[0]
+            print "new_pet(): request.form.getlist('special_needs') = {}".format(request.form.getlist('special_needs'))[0]
+            print "new_pet(): 'family_id' = {}".format(family.id)
+            print "new_pet(): 'user_id' = {}".format(family.user_id)
 
         name = request.form.getlist('name')[0]
         description = request.form.getlist('description')[0]
@@ -666,20 +672,20 @@ def newPet(family_id):
         family_id = family.id
         user_id = family.user_id
 
-        newPet = Pet(name,description,image_url,breed,gender,
+        new_pet = Pet(name,description,image_url,breed,gender,
                      age,special_needs,family_id,user_id)
 
-        session.add(newPet)
+        session.add(new_pet)
         session.commit()
 
-        flash('Pet {} Successfully Created'.format(newPet.name))
-        return redirect(url_for('showPets', family_id=family.id))
+        flash('Pet {} Successfully Created'.format(new_pet.name))
+        return redirect(url_for('show_pets', family_id=family.id))
     else:
-        return render_template('newPet.html', family=family)
+        return render_template('new_pet.html', family=family)
 
 # Edit a Pet
 @app.route('/family/<int:family_id>/pets/<int:pet_id>/edit/', methods=['GET', 'POST'])
-def editPet(family_id, pet_id):
+def edit_pet(family_id, pet_id):
 
     login_status = get_login_status()
 
@@ -711,14 +717,14 @@ def editPet(family_id, pet_id):
 
         flash('Pet Successfully Edited')
 
-        return redirect(url_for('showPets', family_id=family_id))
+        return redirect(url_for('show_pets', family_id=family_id))
     else:
-        return render_template('editPet.html', pet=petToEdit)
+        return render_template('edit_pet.html', pet=petToEdit)
 
 
 # Delete a Pet
 @app.route('/family/<int:family_id>/pets/<int:pet_id>/delete/', methods=['GET', 'POST'])
-def deletePet(family_id, pet_id):
+def delete_pet(family_id, pet_id):
 
     login_status = get_login_status()
 
@@ -731,29 +737,22 @@ def deletePet(family_id, pet_id):
         return "<script>function myFunction() {alert('You are not authorized to delete this pet. Please create your own pet to delete.');}</script><body onload='myFunction()''>"
 
     if request.method == 'POST':
-
-        if _DEBUG:
-            print "deletePet(): request.get_data() ? {}".format(request.get_data())
-
-        # the returned data actually contains the trailing '='
-        if request.get_data() == 'remove=':
-            session.delete(petToDelete)
-            session.commit()
-            flash("{} removed from the database.".format(petToDelete.name ))
-
-        return redirect(url_for('showPets', family_id=petToDelete.family_id))
+        session.delete(petToDelete)
+        session.commit()
+        flash("{} removed from the database.".format(petToDelete.name ))
+        return redirect(url_for('show_pets', family_id=petToDelete.family_id))
     else:
-        return render_template('deletePet.html', family_id=petToDelete.family_id, pet=petToDelete)
+        return render_template('delete_pet.html', family_id=petToDelete.family_id, pet=petToDelete)
 
 def getUserID(email):
-    '''
+    """
         getUserID(email) - retrieve user's application-assigned id from the database
 
         Argument: user's email address
 
         Return: User id if user record exists in the database
                 None if user record does not exist in the database
-    '''
+    """
     try:
         user = session.query(User).filter_by(email=email).one()
         return user.id
@@ -761,33 +760,33 @@ def getUserID(email):
         return None
 
 
-def getUserInfo(user_id):
-    '''
-        getUserInfo(user_id) - retrieve user data from the database
+def get_user_info(user_id):
+    """
+        get_user_info(user_id) - retrieve user data from the database
 
         Argument: user id
 
         Return: User object
-    '''
+    """
     user = session.query(User).filter_by(id=user_id).one()
     if _DEBUG:
         print
-        print "getUserInfo(user_id): user.id = {}".format(user.id)
-        print "\tgetUserInfo(user_id): user.name = {}".format(user.name)
-        print "\tgetUserInfo(user_id): user.picture_url = {}".format(user.picture_url)
+        print "get_user_info(user_id): user.id = {}".format(user.id)
+        print "\tget_user_info(user_id): user.name = {}".format(user.name)
+        print "\tget_user_info(user_id): user.picture_url = {}".format(user.picture_url)
         print
     return user
 
 
-def createUser(login_session):
-    '''
-        createUser(login_session) - create a user in the application's database
+def create_user(login_session):
+    """
+        create_user(login_session) - create a user in the application's database
 
         Argument: login_session object (contains information about the user from the login resource (i.e., g+, Facebook, etc.))
 
         Return: User id if user record exists in the database
                 None if user record does not exist in the database
-    '''
+    """
     newUser = User(name=login_session['username'],
                    email=login_session['email'],
                    picture_url=login_session['picture_url'])
@@ -800,7 +799,7 @@ def createUser(login_session):
     except:
         if _DEBUG:
             print "EXCEPTION!: User record not found in the database."
-            print "createUser(login_session)): email = {}".format(login_session['email'])
+            print "create_user(login_session)): email = {}".format(login_session['email'])
         return None
 
 def get_login_status():

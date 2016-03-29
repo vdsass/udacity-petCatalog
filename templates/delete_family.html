@@ -1,0 +1,18 @@
+{% extends "main.html" %}
+{% block content %}
+<!-- delete_family.html
+        User has been logged in. All CRUD capability is available to the user.
+        Login prompt is not displayed.
+
+		Argument: family
+-->
+<h1 class="attention"><strong>Are you sure you want to remove the Pet Family {{family.name}}?</strong></h1>
+<form action="{{ url_for('delete_family',family_id=family.id) }}" method = 'post'>
+	<button type="submit" class="btn btn-delete" id="submit" type="submit">
+	<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>Delete</button>
+</form>
+<a href = '{{url_for('show_families')}}'>
+	<button class="btn btn-warning">
+	<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Cancel</button>
+</a>
+{% endblock %}

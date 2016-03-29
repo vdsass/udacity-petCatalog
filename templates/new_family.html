@@ -1,0 +1,41 @@
+{% extends "main.html" %}
+{% block content %}
+<!-- new_family.html
+        User has been logged in. All CRUD capability is available to the user.
+        Login prompt is not displayed.
+
+		Argument: TODO
+-->
+	<div class="row banner menu">
+		<div class="col-md-11 col-md-offset-1 padding-none">
+			<h1>New Family</h1>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<div class="col-md-6 col-md-offset-1 padding-top">
+
+            <form action="{{ url_for('new_family') }}" method="post">
+
+				<div class="form-group">
+
+                    <label for="name">Name:</label>
+                        <input type ="text" class="form-control" maxlength="100" name="name">
+                    <div class="padding-bottom"></div>
+
+                    <br>
+
+                    <button type="submit" class="btn btn-default create" id="submit" type="submit">
+                        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Save
+                    </button>
+				</div>
+			</form>
+            <a href = "{{url_for('show_families')}}">
+                <button class="btn btn-default cancel">
+                    <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Cancel
+                </button>
+            </a>
+		</div>
+	</div>
+{% endblock %}

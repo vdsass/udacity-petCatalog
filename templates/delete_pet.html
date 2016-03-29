@@ -1,0 +1,23 @@
+{% extends "main.html" %}
+{% block content %}
+<!-- delete_pet.html
+        User has been logged in. All CRUD capability is available to the user.
+        Login prompt is not displayed.
+
+		Argument: pet = petToDelete
+-->
+<h2> Removing the database record for {{pet.name}}. Press Cancel to go back.</h2>
+
+<form action="{{ url_for('delete_pet',family_id=family_id,pet_id=pet.id) }}" method="post">
+
+	<button type="submit" name="remove" class="btn btn-default remove">
+        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Remove
+    </button>
+
+	<a href = " {{url_for('show_families')}} ">
+		<button type="submit" name="cancel" class="btn btn-default cancel">
+            <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Cancel
+        </button>
+	</a>
+</form>
+{% endblock %}

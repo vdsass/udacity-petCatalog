@@ -12,7 +12,7 @@
 	<div class="row padding-top padding-bottom">
 		<div class="col-md-1"></div>
 		<div class="col-md-10 padding-none">
-			<a href="{{url_for('newFamily')}}">
+			<a href="{{url_for('new_family')}}">
 				<button class="btn btn-default" id="new-family">
 					<span class="glyphicon glyphicon-heart" aria-hidden="true"></span>Add A Pet Family
 				</button>
@@ -22,7 +22,7 @@
 	</div>
 
 	{% for family in families %}
-    <a href = "{{url_for('showPets', family_id=family.id)}}">
+    <a href = "{{url_for('show_pets', family_id=family.id)}}">
         <div class="row">
             <div class="col-md-1"></div>
                 <div class="col-md-10 family-list">
